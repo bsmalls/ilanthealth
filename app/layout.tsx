@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { montserrat } from '@/app/ui/fonts';
 
 export const metadata: Metadata = {
-  title: "Ilant Health: Google Books Search",
-  description: "Search the Google Books API",
+title: "Ilant Health: Google Books Search",
+description: "Search the Google Books API",
 };
 
 export default function RootLayout({
