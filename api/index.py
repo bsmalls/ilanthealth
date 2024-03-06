@@ -1,13 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import httpx
 import json
-
-
-def get_secrets():
-    with open("secrets.json") as secrets_file:
-        secrets = json.load(secrets_file)
-    return secrets
-
+from .utils import get_secrets
 
 app = FastAPI()
 google_books_api = "https://www.googleapis.com/books/v1/volumes"
@@ -36,17 +30,18 @@ async def fetch_google_books(url):
 @app.get("/api/v1/books")
 async def search_books(
     search_term: str = "",
+    start_index: int = 0,
 ):
+    max_results: int = 10
 
     if not search_term.strip():
         return {"totalItems": 0, "items": []}
 
-    url = f"{google_books_api}?q={search_term}"
+    url = f"{google_books_api}?q={search_term}&startIndex={start_index - 1}&maxResults={max_results}"
     return await fetch_google_books(url)
 
+
 @app.get("/api/v1/books/{book_id}")
-async def get_book_by_id(
-    book_id: str
-):
+async def get_book_by_id(book_id: str):
     url = f"{google_books_api}/{book_id}"
     return await fetch_google_books(url)

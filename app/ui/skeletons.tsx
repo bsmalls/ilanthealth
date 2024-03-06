@@ -1,7 +1,8 @@
-// Loading animation
 export function BookSkeleton() {
   return (
-    <div className={`rounded-md bg-white p-4 w-full shadow-sm flex justify-end gap-4 flex-row-reverse mb-2 sm:mb-0`}>
+    <div
+      className={`rounded-md bg-white p-4 w-full shadow-sm flex justify-end gap-4 flex-row-reverse mb-2 sm:mb-0`}
+    >
       <div className="sm:basis-2/3 flex grow flex-col">
         <div className="h-5 w-full mb-2 rounded-full bg-gray-300" />
         <div className="h-3 w-full mb-2 rounded-full bg-gray-200" />
@@ -32,5 +33,21 @@ export function BooksSkeleton() {
       <BookSkeleton />
       <BookSkeleton />
     </>
+  );
+}
+
+export function BookDetailsSkeleton() {
+  return (
+    <div className="rounded-md bg-white p-4 w-full shadow-sm flex justify-end gap-4 md:gap-8 flex-col-reverse sm:flex-row-reverse">
+      <div className="flex flex-col sm:basis-1/2 md:basis-2/3">
+        <div className="h-5 w-full mb-2 rounded-full bg-gray-300" />
+        <div className="h-3 w-full mb-2 rounded-full bg-gray-200" />
+        <div className="h-3 w-full mb-2 rounded-full bg-gray-200" />
+        <div className="h-48 w-full rounded-md bg-gray-200" />
+      </div>
+      <div className="sm:basis-1/2 md:basis-1/3 max-w-[384px] max-h-[500px]">
+        <div className="w-full pt-[120%] bg-gray-300" />
+      </div>
+    </div>
   );
 }

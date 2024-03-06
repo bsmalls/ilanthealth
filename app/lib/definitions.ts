@@ -14,6 +14,7 @@ export type VolumeInfo = {
     pageCount?: number
     publishedDate?: string
     publisher?: string
+    subtitle?: string
     title?: string
 }
 

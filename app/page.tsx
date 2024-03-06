@@ -4,20 +4,29 @@ import { useState } from "react";
 import Search from "@/app/ui/search";
 import BookCardsWrapper from "@/app/ui/books";
 import { fetcher } from "@/app/lib/fetcher";
-import { booksAndAuthors } from "@/app/lib/booksAndAuthors";
+import { booksAndAuthors } from "./lib/booksAndAuthors";
 import { useDebouncedCallback } from "use-debounce";
 import useSWR from "swr";
 import qs from "qs";
 
-export default function Page() {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
   const [searchTerm, setSearchTerm] = useState("");
-
+  const currentPage = Number(searchParams?.page) || 1;
   const {
     data: results,
     isLoading,
     error,
   } = useSWR(
-    searchTerm ? `?${qs.stringify({ search_term: searchTerm })}` : null,
+    searchTerm
+      ? `?${qs.stringify({
+          search_term: searchTerm,
+          start_index: currentPage,
+        })}`
+      : null,
     fetcher,
     {
       revalidateOnFocus: false,
