@@ -7,6 +7,7 @@ import { bitter } from "@/app/ui/fonts";
 import parse from "html-react-parser";
 import { IoIosArrowForward } from "react-icons/io";
 import bookPlaceholder from "@/public/book_placeholder.svg";
+import { useSearchParams } from "next/navigation";
 
 export default function BookCardsWrapper({
   results,
@@ -48,10 +49,11 @@ export default function BookCardsWrapper({
 
 function BookCard({ book }: { book: Book }) {
   const { title, authors, description, imageLinks } = book.volumeInfo;
-
+  const searchParams = useSearchParams();
   const authorList: string = authors ? authors.join(", ") : "Unknown Author";
   const imageLink: string =
-    (imageLinks && (imageLinks.smallThumbnail || imageLinks.thumbnail)) || bookPlaceholder;
+    (imageLinks && (imageLinks.smallThumbnail || imageLinks.thumbnail)) ||
+    bookPlaceholder;
   const descriptionPreview = (): string => {
     if (!description) return "";
     const words = description?.split(" ") || [];
@@ -79,7 +81,13 @@ function BookCard({ book }: { book: Book }) {
             className={
               "group/details flex flex-row justify-end items-center rounded-full py-1 pl-4 pr-3 text-sm text-gray-500 transition bg-[rgb(244,244,244)] hover:bg-gray-200"
             }
-            href={`/book/${book.id}`}
+            href={{
+              pathname: `/book/${book.id}`,
+              query: {
+                query: searchParams.get("query")?.toString(),
+                page: searchParams.get("page")?.toString(),
+              },
+            }}
           >
             <span className="font-semibold transition group-hover/details:text-gray-900">
               Details

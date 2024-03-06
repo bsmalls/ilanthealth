@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Search from "@/app/ui/search";
 import BookCardsWrapper from "@/app/ui/books";
 import { fetcher } from "@/app/lib/fetcher";
@@ -8,22 +7,25 @@ import { booksAndAuthors } from "./lib/booksAndAuthors";
 import { useDebouncedCallback } from "use-debounce";
 import useSWR from "swr";
 import qs from "qs";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Page({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: { query?: string; page?: string };
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const {
     data: results,
     isLoading,
     error,
   } = useSWR(
-    searchTerm
+    query
       ? `?${qs.stringify({
-          search_term: searchTerm,
+          search_term: query,
           start_index: currentPage,
         })}`
       : null,
@@ -34,7 +36,14 @@ export default function Page({
   );
 
   const handleUpdateSearch = useDebouncedCallback((value: string): void => {
-    setSearchTerm(value);
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set("query", value);
+    } else {
+      params.delete("query");
+    }
+    params.set("page", "1");
+    replace(`${pathname}?${params.toString()}`);
   }, 400);
 
   const getBookorAuthor = (): string => {
